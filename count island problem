@@ -1,0 +1,159 @@
+An island is a small piece of land surrounded by water . A group of islands is said to be connected if we can reach from any given island to any other island in the same group . Given V islands (numbered from 1 to V) and E connections or edges between islands. Can you count the number of connected groups of islands.
+
+
+Input Format :
+The first line of input contains two integers, that denote the value of V and E.
+Each of the following E lines contains two integers, that denote that there exists an edge between vertex a and b. 
+Output Format :
+Print the count the number of connected groups of islands
+Constraints :
+0 <= V <= 1000
+0 <= E <= (V * (V-1)) / 2
+0 <= a <= V - 1
+0 <= b <= V - 1
+Time Limit: 1 second
+Sample Input 1:
+5 8
+0 1
+0 4
+1 2
+2 0
+2 4
+3 0
+3 2
+4 3
+Sample Output 1:
+1 
+
+
+
+System code///
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+public class Runner {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    
+    public static int[][] takeInput() throws IOException {
+		String[] strNums;
+        strNums = br.readLine().split("\\s");
+        int n = Integer.parseInt(strNums[0]);
+        int e = Integer.parseInt(strNums[1]);
+
+        int[][] edges = new int[n][n];
+        int firstvertex, secondvertex;
+
+        for (int i = 0; i < e; i++) {
+            String[] strNums1;
+            strNums1 = br.readLine().split("\\s");
+            firstvertex = Integer.parseInt(strNums1[0]);
+            secondvertex = Integer.parseInt(strNums1[1]);
+            edges[firstvertex][secondvertex] = 1;
+            edges[secondvertex][firstvertex] = 1;
+        }
+        return edges;
+    }
+    public static void main(String[] args) throws NumberFormatException, IOException {
+        int [][]edges = takeInput();
+        
+        int ans = Solution.numConnected(edges, edges.length);
+        System.out.println(ans);
+		
+	}
+}
+
+
+main code/// 
+
+import java.util.Scanner;
+public class Solution {
+
+    
+    public static void dfTraversal(int[][] adjMatrix,int currentVertex, boolean visited[])
+    {
+      //  System.out.print(currentVertex);
+        visited[currentVertex]=true;
+        for(int i =0;i<adjMatrix.length;i++)
+        {
+            if(adjMatrix[currentVertex][i]==1 && visited[i]==false)
+            {
+                
+                dfTraversal(adjMatrix,i,visited);
+                
+            }
+                
+        }
+        
+    }
+    
+	public static int numConnected(int[][] edges, int n) {
+        
+		/* Your class should be named Solution
+		 * Don't write main().
+		 * Don't read input, it is passed as function argument.
+		 * Return output and don't print it.
+	 	 * Taking input and printing output is handled automatically.
+        */
+    
+    
+    // Scanner sc = new Scanner(System.in);
+    //     int a= sc.nextInt();
+      
+        
+        
+      //   System.out.print(edges[i][j]);
+      
+        boolean []visited= new boolean[n];
+     int starting_vertex=0;    
+     int previous_vertex=-1;   
+        int count=0;
+     for(int i =1;i<n+1;i++)
+     {
+         
+         if(starting_vertex!=previous_vertex)
+         {
+              dfTraversal(edges,starting_vertex,visited);
+              count++;
+         }
+         int l=0;
+         for(int j=0;j<n;j++)
+         {
+             if(visited[j]==false)
+             {
+                 previous_vertex=starting_vertex;
+                 starting_vertex=j;
+                 l=1; // when this is one then both  previous_vertex=starting_vertex different
+                 break;
+             }
+         }
+         
+         if(l==0)
+         {
+              previous_vertex=starting_vertex; // when this become same then we stop 
+                 
+         }
+         
+         
+       //  starting_vertex=
+         
+     }
+        
+   //      System.out.print(count);
+        
+     
+        
+
+        
+        
+   
+     return count;
+    
+    }
+
+
+}
+
+
+
+
