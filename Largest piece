@@ -1,0 +1,198 @@
+It's Gary's birthday today and he has ordered his favourite square cake consisting of '0's and '1's . But Gary wants the biggest piece of '1's and no '0's . A piece of cake is defined as a part which consist of only '1's, and all '1's share an edge with each other on the cake. Given the size of cake N and the cake, can you find the count of '1's in the biggest piece of '1's for Gary ?
+Input Format :
+The first line of input contains an integer, that denotes the value of N. 
+Each of the following N lines contain N space separated integers.
+Output Format :
+Print the count of '1's in the biggest piece of '1's, according to the description in the task.
+Constraints :
+1 <= N <= 1000
+Time Limit: 1 sec
+Sample Input 1:
+2
+1 1
+0 1
+Sample Output 1:
+3
+
+
+//System code
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class Runner {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    
+    public static String[] takeInput() throws IOException {
+        int n = Integer.parseInt(br.readLine().trim());
+        
+
+        String[] edge = new String[n];
+        for (int i = 0; i < n; i++) {
+            edge[i] = br.readLine().replaceAll("\\s", "");
+        }
+        return edge;
+    }
+
+    public static void main(String[] args) throws NumberFormatException, IOException {
+
+        String[] edge = takeInput();
+        int ans = Solution.dfs(edge,edge.length);
+        System.out.println(ans);   
+    }	
+}
+
+
+//////////////////////////////////////////////////////////////////  main code////////////////////////////////////////////////////////////////////////////////////////////////////
+
+public class Solution {
+
+    static int[][] dir = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+    
+  
+    // we want to count the no equal comparision in recusion 
+    
+    static int max_size=0;
+    
+    public static void countofbigcake(String graph[], int visited[][], int row, int col)
+    {
+        if(row<0 && col<0 && row>=visited.length && col>=visited.length)
+        {
+            return;
+        }
+        
+       
+        if( visited[row][col]==0)
+        {
+            return;
+        }
+     
+        
+        int i[]={-1,1,0,0};
+        int j[]={0,0,-1,1};
+        
+        for(int k =0; k<4;k++)
+        {
+            int x=row+i[k];
+            int y=col+j[k];
+            //    System.out.println(x+" "+y);
+    if(x>=0 && y>=0 && x<visited.length && y<visited.length && graph[row].charAt(col) == '1' && graph[row].charAt(col)==graph[x].charAt(y)  && visited[row][col]==1 && visited[x][y]==0)
+           {
+       //          cakesize=cakesize+1;// does not folow dynamism
+      
+           max_size=max_size+1;
+          
+      
+        
+                visited[x][y]=1;
+           //       System.out.println(row+" "+col+" "+x+" "+y);
+                    countofbigcake(graph,visited,x,y); 
+                
+           //    visited[x][y]=0; // backtrack we are not using backtrack here because it causing TLE because we need to call recursion for each cell 
+                
+            }
+            
+            
+            
+    
+         
+            
+        }
+        
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+   
+        
+        
+        
+        
+        
+    }
+    
+    
+    
+    
+    
+    
+
+	public static int dfs(String[] edge, int n) {
+        
+        
+        int visited[][]=new int[n][n];
+        
+      //  System.out.print(edge[0]);
+        String graph[]= new String[n];
+        
+        for(int i =0;i<edge.length;i++)
+        {
+            graph[i]=edge[i];
+            
+        }
+        
+        int max_cakesize=0;
+   //     visited[0][0]=1;
+    //    countofbigcake(graph,visited,0,0);
+      //  int a=;
+        
+         for(int i =0;i<edge.length;i++) //  to call recursion when find 1 in array 
+        {
+            for(int j =0;j<edge.length;j++)
+        {
+            if(graph[i].charAt(j) == '1' )
+                
+            {    
+                   visited[i][j]=1;
+                   max_size=1;
+                   countofbigcake(graph,visited,i,j);
+                 //  visited[i][j]=0;
+                 
+                  if(max_cakesize<max_size)
+                  {
+                      max_cakesize=max_size;
+                      
+                  }
+           max_size=0;
+                   
+            }
+          //      System.out.print(visited[i][j]);
+            
+                           
+                
+                
+                
+            
+            }
+        //  System.out.println();   
+             
+            
+        }
+      //     System.out.println(cakesize);   
+		/* Your class should be named Solution
+		 * Don't write main().
+		 * Don't read input, it is passed as function argument.
+		 * Return output and don't print it.
+	 	 * Taking input and printing output is handled automatically. 
+        */
+        
+        
+        
+        
+        
+        
+        
+        return   max_cakesize;
+	}
+
+
+    
+}
+
